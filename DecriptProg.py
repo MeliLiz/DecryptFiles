@@ -9,7 +9,7 @@ if "__main__" == __name__:
                         'mp3_1': [0xFF, 0xFB], 
                         'mp4': [0x66, 0x74, 0x79, 0x70]
                     }
-    file = open("file1.lol", "rb")
+    file = open("file3.lol", "rb")
     data = file.read()
     numbers = [x for x in data] # bytes as integers
     hexadecimal = [hex(x) for x in numbers ] # bytes as hexadecimal
@@ -77,6 +77,11 @@ if "__main__" == __name__:
         
         print(decimal_file[:10])
         print(hexadecimal_file[:10])
+
+        # Write the file
+        file = open("file2_decrypted." + key, "wb")
+        file.write(bytearray(decimal_file))
+        file.close()
 
 
         #print(inverses_alpha_mult)
