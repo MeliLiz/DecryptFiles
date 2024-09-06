@@ -44,16 +44,14 @@ if "__main__" == __name__:
         print("Inverses: ", inverses_alpha_mult)
 
         if len(inverses_alpha_mult) == 0: # If we are not working with something that has inverse
+
             alpha_mult = (first_sign - second_sign) % 256
-            #print("alpha_mult: ", alpha_mult % 256)
             right_side = (first_file - second_file) % 256
 
             inverses_alpha_mult = [x for x in range(256) if (x * alpha_mult) % 256 == 1] # Get the inverses of alpha_mult
 
             print("Trying: (", first_sign," - ", second_sign, ") a = ", first_file, " - ", second_file, " = " , right_side, "mod 256")
             print( alpha_mult, "a = " , right_side, "mod 256")
-
-            inverses_alpha_mult = [x for x in range(256) if (x * alpha_mult) % 256 == 1] # Get the inverses of alpha_mult
             print("Inverses: ", inverses_alpha_mult)
 
             if inverses_alpha_mult == []:
@@ -73,8 +71,12 @@ if "__main__" == __name__:
 
         for num in decimal_file:
             num = (num * alpha + beta) % 256
+
+        # Convert to hexadecimal
+        hexadecimal_file = [hex(x) for x in decimal_file]
         
         print(decimal_file[:10])
+        print(hexadecimal_file[:10])
 
 
         #print(inverses_alpha_mult)
