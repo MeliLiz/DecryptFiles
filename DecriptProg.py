@@ -69,24 +69,17 @@ if "__main__" == __name__:
             print("alpha: ", alpha)
             print("beta: ", beta)
 
-        for num in decimal_file:
-            num = (num * alpha + beta) % 256
 
-        # Convert to hexadecimal
-        hexadecimal_file = [hex(x) for x in decimal_file]
-        
+        # Apply the operations to each byte of the file
+        for i,num in enumerate(decimal_file):
+            decimal_file[i] = (num * alpha + beta) % 256
+
         print(decimal_file[:10])
-        print(hexadecimal_file[:10])
 
         # Write the file
         file = open("file2_decrypted." + key, "wb")
         file.write(bytearray(decimal_file))
         file.close()
-
-
-        #print(inverses_alpha_mult)
-
-        #print(alpha_mult, right_side)
 
 
     
