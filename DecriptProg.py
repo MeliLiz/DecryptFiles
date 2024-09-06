@@ -9,7 +9,7 @@ if "__main__" == __name__:
                         'mp3_1': [0xFF, 0xFB], 
                         'mp4': [0x66, 0x74, 0x79, 0x70]
                     }
-    file = open("file4.lol", "rb")
+    file = open("file1.lol", "rb")
     data = file.read()
     numbers = [x for x in data] # bytes as integers
     hexadecimal = [hex(x) for x in numbers ] # bytes as hexadecimal
@@ -28,6 +28,7 @@ if "__main__" == __name__:
 
     for key in decimal_signatures:
         #Make the ecuation system to find alpha and beta
+
         first_file = decimal_file[0] # First byte of the file
         second_file = decimal_file[1] # Second byte of the file
         first_sign = decimal_signatures[key][0]  # First byte of the signature
@@ -36,16 +37,25 @@ if "__main__" == __name__:
         alpha_mult = (first_file - second_file) % 256 
         right_side = (first_sign - second_sign) % 256
 
-        #print("alpha_mult: ", alpha_mult)
+        print("Trying: (", first_file," - ", second_file, ") a = ", first_sign, " - ", second_sign, " = " , right_side, "mod 256")
+        print( alpha_mult, "a = " , right_side, "mod 256")
 
         inverses_alpha_mult = [x for x in range(256) if (x * alpha_mult) % 256 == 1] # Get the inverses of alpha_mult
+        print("Inverses: ", inverses_alpha_mult)
 
         if len(inverses_alpha_mult) == 0: # If we are not working with something that has inverse
             alpha_mult = (first_sign - second_sign) % 256
-            print("alpha_mult: ", alpha_mult % 256)
+            #print("alpha_mult: ", alpha_mult % 256)
             right_side = (first_file - second_file) % 256
 
             inverses_alpha_mult = [x for x in range(256) if (x * alpha_mult) % 256 == 1] # Get the inverses of alpha_mult
+
+            print("Trying: (", first_sign," - ", second_sign, ") a = ", first_file, " - ", second_file, " = " , right_side, "mod 256")
+            print( alpha_mult, "a = " , right_side, "mod 256")
+
+            inverses_alpha_mult = [x for x in range(256) if (x * alpha_mult) % 256 == 1] # Get the inverses of alpha_mult
+            print("Inverses: ", inverses_alpha_mult)
+
             if inverses_alpha_mult == []:
                 print("No tiene inverso")
                 continue
@@ -60,6 +70,11 @@ if "__main__" == __name__:
             beta = (first_sign - (first_file * alpha)) % 256
             print("alpha: ", alpha)
             print("beta: ", beta)
+
+        for num in decimal_file:
+            num = (num * alpha + beta) % 256
+        
+        print(decimal_file[:10])
 
 
         #print(inverses_alpha_mult)
