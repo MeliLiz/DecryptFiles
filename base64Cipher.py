@@ -1,3 +1,5 @@
+import sys
+
 # string de valores base64
 base64_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 
@@ -20,18 +22,20 @@ def base64_to_bytes(data):
     
     return bytes_array
 
-def save_as_png(bytes_array, output_file):
-    # Escribe los bytes en un archivo PNG
+def save(bytes_array, output_file):
+    # Escribe los bytes en un archivo
     with open(output_file, 'wb') as f:
         f.write(bytearray(bytes_array))
 
 if __name__ == "__main__":
-    # Leer archivo base64
-    with open("file1.lol", "r") as f:
-        base64_data = f.read()
-    
-    # Decodificar base64 a bytes
-    img_bytes = base64_to_bytes(base64_data)
-    
-    # Guardar como imagen PNG
-    save_as_png(img_bytes, "decrypted_img.png")
+
+    if len(sys.argv) < 2:
+        print("Usage: python3 base64Cipher.py <input_file>")
+        sys.exit(1)
+    else: 
+        input_file = sys.argv[1]
+        output_file = sys.argv[2]
+        with open(input_file, "r") as f:
+            base64_data = f.read()
+        img_bytes = base64_to_bytes(base64_data)
+        save(img_bytes, output_file)
