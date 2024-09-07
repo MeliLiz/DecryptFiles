@@ -1,13 +1,13 @@
 import base64
 
-def decode_mod(data):
+def decode_mod(file_path):
     file_signatures1 = {
                         'png': [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a], 
                         'pdf': [0x25, 0x50, 0x44, 0x46, 0x2D], 
                         'mp3': [0x49, 0x44, 0x33], 
                         'mp4': [0x66, 0x74, 0x79, 0x70]
                     }
-    file = open("file4.lol", "rb")
+    file = open(file_path, "rb")
     data = file.read()
     numbers = [x for x in data] # bytes as integers
     hexadecimal = [hex(x) for x in numbers ] # bytes as hexadecimal
