@@ -1,11 +1,6 @@
 import base64
 
-# Decode from base 64
-def decode_base64(data):
-    return base64.b64decode(data)
-
-
-if "__main__" == __name__:
+def decode_mod(data):
     file_signatures1 = {
                         'png': [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a], 
                         'pdf': [0x25, 0x50, 0x44, 0x46, 0x2D], 
@@ -96,12 +91,13 @@ if "__main__" == __name__:
             file = open("file2_decrypted." + key, "wb")
             file.write(bytearray(decoded))
             file.close()
+            break
 
-    if not found:
-        decode = decode_base64(data)
-        file = open("file2_decrypted.png", "wb")
-        file.write(decode)
-        file.close()
+    return found
+
+
+if "__main__" == __name__:
+    print(decode_mod("file2.lol"))
 
 
     
