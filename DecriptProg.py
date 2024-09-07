@@ -1,12 +1,14 @@
-import base64
 
-def decode_mod(file_path):
-    file_signatures1 = {
-                        'png': [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a], 
+def decode_mod(file_path, decrypted_name):
+    #Colors for the output
+    BLUE = '\033[94m'
+    ENDC = '\033[0m'
+
+    file_signatures1 = {'png': [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a], 
                         'pdf': [0x25, 0x50, 0x44, 0x46, 0x2D], 
                         'mp3': [0x49, 0x44, 0x33], 
-                        'mp4': [0x66, 0x74, 0x79, 0x70]
-                    }
+                        'mp4': [0x66, 0x74, 0x79, 0x70] }
+    
     file = open(file_path, "rb")
     data = file.read()
     numbers = [x for x in data] # bytes as integers
@@ -21,8 +23,6 @@ def decode_mod(file_path):
     for key in file_signatures1:
         decimal_signatures[key] = [int(x) for x in file_signatures1[key]]
 
-    BLUE = '\033[94m'
-    ENDC = '\033[0m'
     for key in decimal_signatures:
         #Make the ecuation system to find alpha and beta
         print(BLUE, "KEY: ", key, ENDC)
@@ -40,21 +40,21 @@ def decode_mod(file_path):
         alpha_mult = (first_file - second_file) % 256 
         right_side = (first_sign - second_sign) % 256
 
-        print("Tryingf: (", first_file," - ", second_file, ") a = ", first_sign, " - ", second_sign, " = " , right_side, "mod 256")
+        print("Tryingf: (", first_file," - ", second_file, ") a = (", first_sign, " - ", second_sign, ") mod 256")
         print("Tryingf:", alpha_mult, "a = " , right_side, "mod 256")
 
         inverses_alpha_mult = [x for x in range(256) if (x * alpha_mult) % 256 == 1] # Get the inverses of alpha_mult
-        #print("Inverses: ", inverses_alpha_mult)
 
-        if len(inverses_alpha_mult) == 0: # If we are not working with something that has inverse
+        # If we are not working with something that has inverse, then we need to change the order of the ecuation
+        if len(inverses_alpha_mult) == 0: 
 
             alpha_mult = (first_sign - second_sign) % 256
             right_side = (first_file - second_file) % 256
 
             inverses_alpha_mult = [x for x in range(256) if (x * alpha_mult) % 256 == 1] # Get the inverses of alpha_mult
 
-            #print("Trying: (", first_sign," - ", second_sign, ") a = ", first_file, " - ", second_file, " = " , right_side, "mod 256")
-            #print("Trying: ", alpha_mult, "a = " , right_side, "mod 256")
+            print("Trying: (", first_sign," - ", second_sign, ") a = (", first_file, " - ", second_file, " = " , right_side, ") mod 256")
+            print("Trying: ", alpha_mult, "a = " , right_side, "mod 256")
             #print("Inverses: ", inverses_alpha_mult)
 
             if inverses_alpha_mult == []:
@@ -63,15 +63,10 @@ def decode_mod(file_path):
             else:
                 alpha = right_side * inverses_alpha_mult[0] % 256
                 beta = (first_file - (first_sign * alpha)) % 256
-                #print("alpha: ", alpha)
-                #print("beta: ", beta)
 
         else:
             alpha = right_side * inverses_alpha_mult[0] % 256
             beta = (first_sign - (first_file * alpha)) % 256
-            #print("alpha: ", alpha)
-            #print("beta: ", beta)
-
 
         # Apply the operations to each byte of the file
         decoded = []
@@ -92,7 +87,7 @@ def decode_mod(file_path):
 
         # Write the file
         if found:
-            file = open("file4_decrypted." + key, "wb")
+            file = open(decrypted_name +"." + key, "wb")
             file.write(bytearray(decoded))
             file.close()
             break
@@ -101,7 +96,7 @@ def decode_mod(file_path):
 
 
 if "__main__" == __name__:
-    print(decode_mod("file4.lol"))
+    print(decode_mod("file3.lol", "file3_decrypted"))
 
 
     
