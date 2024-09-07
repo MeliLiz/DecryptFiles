@@ -1,5 +1,9 @@
 import os
 import random
+from math import gcd
+
+def is_relative_prime(a, b): 
+    return gcd(a, b) == 1
 
 def affine_encrypt(byte, a, b):
     return (a*byte + b) % 256
@@ -25,12 +29,14 @@ def encode_base64(data):
     
     return encoded_str
 
-def affine_encrypt_file(file_path,otput_name):
+def affine_encrypt_file(file_path,otput_name, a):
+    if not is_relative_prime(a, 256) or not isinstance(a, int):
+        raise ValueError("a tiene que ser un número, primo relativo a 256")
     b = random.randint(0, 255)
     with open(file_path, "rb") as f:
         data = f.read()
 
-    encrypted_data = bytes([affine_encrypt(x, 83, b) for x in data])
+    encrypted_data = bytes([affine_encrypt(x, a, b) for x in data])
 
     with open(otput_name, "wb") as f:
         f.write(encrypted_data)
