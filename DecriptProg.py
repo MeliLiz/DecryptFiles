@@ -1,3 +1,8 @@
+import base64
+
+# Decode from base 64
+def decode_base64(data):
+    return base64.b64decode(data)
 
 
 if "__main__" == __name__:
@@ -5,15 +10,16 @@ if "__main__" == __name__:
                         'png': [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a], 
                         'pdf': [0x25, 0x50, 0x44, 0x46, 0x2D], 
                         'mp3': [0x49, 0x44, 0x33], 
-                        'mp4': [0x66, 0x74, 0x79, 0x70]
+                        'mp4': [0x20, 0x66, 0x74, 0x79, 0x70]
                     }
-    file = open("file4.lol", "rb")
+    file = open("file2.lol", "rb")
     data = file.read()
     numbers = [x for x in data] # bytes as integers
     hexadecimal = [hex(x) for x in numbers ] # bytes as hexadecimal
 
     #Transform the hexadecimal numbers to decimal
     decimal_file = [int(x, 16) for x in hexadecimal]
+    print("Decimal file: ", decimal_file[:10])
 
     #Transform the file signatures1 to decimal
     decimal_signatures = {}
@@ -23,10 +29,10 @@ if "__main__" == __name__:
 
     for key in decimal_signatures:
         #Make the ecuation system to find alpha and beta
-
-        if key == "mp4": #If its an mp4, we need to start from the fifth byte
+        if key == 'mp4': #If its an mp4, we need to start from the fifth byte
             first_file = decimal_file[4] # First byte of the file
             second_file = decimal_file[5] # Second byte of the file
+            print("First file: ", first_file, "Second file: ", second_file)
         else:
             first_file = decimal_file[0] # First byte of the file
             second_file = decimal_file[1] # Second byte of the file
@@ -71,12 +77,13 @@ if "__main__" == __name__:
 
 
         # Apply the operations to each byte of the file
+        decoded = []
         for i,num in enumerate(decimal_file):
-            decimal_file[i] = (num * alpha + beta) % 256
+            decoded.append((num * alpha + beta) % 256)
 
         # Check if the fist bytes are the same as the signature
         signature = file_signatures1[key]
-        decimal_file_signature = decimal_file[:len(signature)]
+        decimal_file_signature = decoded[:len(signature)]
 
         found = True
         for i in range(len(signature)):
@@ -86,9 +93,15 @@ if "__main__" == __name__:
 
         # Write the file
         if found:
-            file = open("file4_decrypted." + key, "wb")
-            file.write(bytearray(decimal_file))
+            file = open("file2_decrypted." + key, "wb")
+            file.write(bytearray(decoded))
             file.close()
+
+    if not found:
+        decode = decode_base64(data)
+        file = open("file2_decrypted.png", "wb")
+        file.write(decode)
+        file.close()
 
 
     
