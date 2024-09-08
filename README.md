@@ -14,7 +14,8 @@ jpeg
 
 ### Uso de los programas
 
-Este proyecto contiene 2 tipos de programas, para encriptar archivos y para desencriptar
+Este proyecto contiene 2 tipos de programas, para encriptar archivos y para desencriptar.
+Los programas se encuentran en la carpeta src
 
 ## Encriptar
 
