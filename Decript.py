@@ -29,15 +29,16 @@ def decode_mod(file_path, decrypted_name):
         #Make the ecuation system to find alpha and beta
         print(BLUE, "KEY: ", key, ENDC)
         if key == 'mp4': #If its an mp4, we need to start from the fifth byte
-            first_file = decimal_file[4] # First byte of the file
-            second_file = decimal_file[5] # Second byte of the file
+            first_file = decimal_file[5] # First byte of the file
+            second_file = decimal_file[6] # Second byte of the file
+            first_sign = decimal_signatures[key][1]  # First byte of the signature
+            second_sign = decimal_signatures[key][2]  
             print("First file: ", first_file, "Second file: ", second_file)
         else:
             first_file = decimal_file[0] # First byte of the file
             second_file = decimal_file[1] # Second byte of the file
-
-        first_sign = decimal_signatures[key][0]  # First byte of the signature
-        second_sign = decimal_signatures[key][1]  # Second byte of the signature
+            first_sign = decimal_signatures[key][0]  # First byte of the signature
+            second_sign = decimal_signatures[key][1]  # Second byte of the signature
 
         alpha_mult = (first_file - second_file) % 256 
         right_side = (first_sign - second_sign) % 256
@@ -80,12 +81,19 @@ def decode_mod(file_path, decrypted_name):
         # Check if the fist bytes are the same as the signature
         signature = file_signatures1[key]
         decimal_file_signature = decoded[:len(signature)]
+        print("Sign: ", signature)
 
         found = True
-        for i in range(len(signature)):
-            if decimal_file_signature[i] != signature[i]:
-                found = False
-                break
+        if key == 'mp4':
+            for i in range(4, len(signature)):
+                if decimal_file_signature[i] != signature[i]:
+                    found = False
+                    break
+        else:
+            for i in range(len(signature)):
+                if decimal_file_signature[i] != signature[i]:
+                    found = False
+                    break
 
         # Write the file
         if found:
@@ -97,15 +105,17 @@ def decode_mod(file_path, decrypted_name):
     return found
 
 
-if "__main__" == __name__:
 
-    if len(sys.argv) < 3:
+if "__main__" == __name__:
+    """if len(sys.argv) < 3:
         print("Usage: python3 Main.py <input_file> <output_file>")
         sys.exit(1)
     else:
         input_file = sys.argv[1]
         output_file = sys.argv[2]
-        print(decode_mod(input_file, output_file))
+        print(decode_mod(input_file, output_file))"""
+    
+    print(decode_mod("file4.lol", "File4_decoded"))
 
 
     
