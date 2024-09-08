@@ -27,7 +27,7 @@ Donde input_file es la ruta al archivo que deseas encriptar, output_file es el n
 >[!CAUTION]
 >alpha tiene que ser un número primo relativo a 256, de lo contrario, se lanzará un error. 
 
-La bandera opcional "-b" va al final y con esto le dices al programa que lo que quieres es codificar el archivo de entrada en base 64, para eso, corre el comando  
+Se puede agregar la opcional "-b" en cualquier parte del comando después del Encript.py y con esto le dices al programa que lo que quieres es codificar el archivo de entrada en base 64, para eso, corre el comando  
 ```
 python3 Encript.py <Input_file> <Output_file> -b
 ```
