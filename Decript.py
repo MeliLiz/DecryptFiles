@@ -48,25 +48,9 @@ def decode_mod(file_path, decrypted_name):
 
         inverses_alpha_mult = [x for x in range(256) if (x * alpha_mult) % 256 == 1] # Get the inverses of alpha_mult
 
-        # If we are not working with something that has inverse, then we need to change the order of the ecuation
-        if len(inverses_alpha_mult) == 0: 
-
-            alpha_mult = (first_sign - second_sign) % 256
-            right_side = (first_file - second_file) % 256
-
-            inverses_alpha_mult = [x for x in range(256) if (x * alpha_mult) % 256 == 1] # Get the inverses of alpha_mult
-
-            print("Trying: (", first_sign," - ", second_sign, ") a = (", first_file, " - ", second_file, " = " , right_side, ") mod 256")
-            print("Trying: ", alpha_mult, "a = " , right_side, "mod 256")
-            #print("Inverses: ", inverses_alpha_mult)
-
-            if inverses_alpha_mult == []:
-                print("No tiene inverso")
-                continue
-            else:
-                alpha = right_side * inverses_alpha_mult[0] % 256
-                beta = (first_file - (first_sign * alpha)) % 256
-
+        if len(inverses_alpha_mult) == 0:
+            print("No inverses found")
+            continue
         else:
             alpha = right_side * inverses_alpha_mult[0] % 256
             beta = (first_sign - (first_file * alpha)) % 256
@@ -115,7 +99,9 @@ if "__main__" == __name__:
         output_file = sys.argv[2]
         print(decode_mod(input_file, output_file))
     
-    #print(decode_mod("file4.lol", "File4_decoded"))
+    """print(decode_mod("file4.lol", "File4_decoded"))
+    print(decode_mod("file3.lol", "File3_decoded"))
+    print(decode_mod("file2.lol", "File2_decoded"))"""
 
 
     
